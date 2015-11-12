@@ -23,8 +23,8 @@ ONBUILD RUN apt-get update -yq \
 	&& update-java-alternatives -s java-7-oracle \
 	
 	# install Tomcat 7 
-        && wget http://mirror.netcologne.de/apache.org/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz -O - | tar -zxv -C /opt/ \
-        && ln -s /opt/apache-tomcat-7.0.61/ /opt/tomcat 
+        && wget http://mirror.netcologne.de/apache.org/tomcat/tomcat-7/v7.0.65/bin/apache-tomcat-7.0.65.tar.gz -O - | tar -zxv -C /opt/ \
+        && ln -s /opt/apache-tomcat-7.0.65/ /opt/tomcat 
 
 # Add Environment variables
 ENV JAVA_HOME="/usr/lib/jvm/java-7-oracle"
