@@ -1,21 +1,26 @@
 FROM learninglayers/base
 MAINTAINER Gordon Lawrenz <lawrenz@dbis.rwth-aachen.de>
 
-# Install Java 8 & Tomcat 8
-RUN apt-get update -yq \
+# Install Java.
+RUN  apt-get update && apt-get install -yq software-properties-common
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/cache/oracle-jdk8-installer
 
-	# add Java repository
-	&& apt-get install -yq software-properties-common \
-	&& add-apt-repository -y ppa:webupd8team/java \
-	&& echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections \
 
-	# install Java 8
-	&& apt-get update -yq \
-	&& apt-get install -yq oracle-java8-installer wget \
-	&& update-java-alternatives -s java-8-oracle
+# Define working directory.
+WORKDIR /data
 
-# Add Environment variables
-ENV JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+# Define commonly used JAVA_HOME variable
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+
+# Define default command.
+CMD ["bash"]
+
 ENV TOMCAT_HOME="/opt/tomcat"
 ENV PATH=$JAVA_HOME/bin:$TOMCAT_HOME/bin:$PATH
 
