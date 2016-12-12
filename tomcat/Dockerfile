@@ -1,16 +1,8 @@
 FROM learninglayers/base
 MAINTAINER Gordon Lawrenz <lawrenz@dbis.rwth-aachen.de>
 
-# Add startscripts
-ADD src/main/files/init.sh	/opt/init.sh
-ADD src/main/files/init		/opt/init
-
 # Install Java 8 & Tomcat 8
 RUN apt-get update -yq \
-
-	# make initscripts runable
-	&& chmod +x /opt/init.sh \
-	&& chmod -R +x /opt/init \
 
 	# add Java repository
 	&& apt-get install -yq software-properties-common \
@@ -45,5 +37,5 @@ WORKDIR /opt/tomcat
 EXPOSE 8080
 VOLUME [ "/opt/tomcat" ]
 
-ENTRYPOINT [ "/opt/tomcat/bin/startup.sh" ]
+ENTRYPOINT [ "/opt/tomcat/bin/startup.sh", "tail -f /opt/tomcat/logs/catalina.out" ]
 CMD [ "run"]
