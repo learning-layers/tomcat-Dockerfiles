@@ -3,6 +3,10 @@ MAINTAINER Gordon Lawrenz <lawrenz@dbis.rwth-aachen.de>
 
 # Install Java.
 RUN  apt-get update && apt-get install -yq software-properties-common
+ADD src/main/files/init.sh	/opt/init.sh
+ADD src/main/files/init		/opt/init
+RUN chmod +x /opt/init.sh \
+	&& chmod -R +x /opt/init
 RUN \
   echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   add-apt-repository -y ppa:webupd8team/java && \
@@ -40,7 +44,7 @@ RUN curl -O http://archive.apache.org/dist/tomcat/tomcat-8/v${TOMCAT_MINOR_VERSI
 
 WORKDIR /opt/tomcat
 EXPOSE 8080
-VOLUME [ "/opt/tomcat" ]
+VOLUME [ "/opt/tomcat", "/opt", "opt/init" ]
 
-ENTRYPOINT [ "/opt/tomcat/bin/startup.sh", "tail -f /opt/tomcat/logs/catalina.out" ]
+ENTRYPOINT [ "/opt/init.sh" ]
 CMD [ "run"]
